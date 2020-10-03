@@ -5,8 +5,43 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+```
+```
+```
+```
+The purpose of the first part of our code is to clear the dataset and make it easier to read and easior to calculate.
+```
+```{r}
+#Read Data
+allData<-read.csv("WorldEconomicOutlookData.csv")
+#Take a look at the data
+summary(allData)
+#All in char change into double
+allData<-allData%>%mutate(WEO.Country.Code=as.numeric(WEO.Country.Code),X1980=as.numeric(X1980),X1981=as.numeric(X1981),X1982=as.numeric(X1982),X1983=as.numeric(X1983),X1984=as.numeric(X1984),X1985=as.numeric(X1985),X1986=as.numeric(X1986),X1987=as.numeric(X1987),X1988=as.numeric(X1988),X1989=as.numeric(X1989),X1990=as.numeric(X1990),X1991=as.numeric(X1991),X1992=as.numeric(X1992),X1993=as.numeric(X1993),X1994=as.numeric(X1994),X1995=as.numeric(X1995),X1996=as.numeric(X1996),X1997=as.numeric(X1997),X1998=as.numeric(X1998),X1999=as.numeric(X1999),X2000=as.numeric(X2000),X2001=as.numeric(X2001),X2002=as.numeric(X2002),X2003=as.numeric(X2003),X2004=as.numeric(X2004),X2005=as.numeric(X2005),X2006=as.numeric(X2006),X2007=as.numeric(X2007),X2008=as.numeric(X2008),X2009=as.numeric(X2009),X2010=as.numeric(X2010),X2011=as.numeric(X2011),X2012=as.numeric(X2012),X2013=as.numeric(X2013),X2014=as.numeric(X2014),X2015=as.numeric(X2015),X2016=as.numeric(X2016),X2017=as.numeric(X2017),X2018=as.numeric(X2018),X2019=as.numeric(X2019),X2020=as.numeric(X2020),X2021=as.numeric(X2021),Estimates.Start.After=as.numeric(Estimates.Start.After))
+#See what the subject code means
+discription<-unique(allData%>%select(WEO.Subject.Code,Subject.Descriptor,Units))
+unique(discription)
+#Change the subject code into something easier to understand
+allData[allData$WEO.Subject.Code=="NGDP_RPCH","WEO.Subject.Code"]="NGDP"
+allData[allData$WEO.Subject.Code=="PPPGDP","WEO.Subject.Code"]="RGDP (international dollars)"
+allData[allData$WEO.Subject.Code=="NGDPRPPPPCPCH","WEO.Subject.Code"]="NGDP per person"
+allData[allData$WEO.Subject.Code=="PCPIPCH","WEO.Subject.Code"]="Inflations rate average"
+allData[allData$WEO.Subject.Code=="PCPIEPCH","WEO.Subject.Code"]="Inflations rate end"
+allData[allData$WEO.Subject.Code=="LUR","WEO.Subject.Code"]="Unemployment rate"
+allData[allData$WEO.Subject.Code=="BCA_NGDPD","WEO.Subject.Code"]="Current account balance"
+allData[allData$WEO.Subject.Code=="GGXCNL_NGDP","WEO.Subject.Code"]="Government net lending/borrowing"
+#After making it easier to understand, get the data we want to us out
+useData<-allData%>%select("Subject"=WEO.Subject.Code,Country,X1980:X2021,Estimates.Start.After)
+#Drop the total NA rows
+useData<-useData[-(1553:1554),]
+```
+```
+```
 ```
 
+```
 ```{r}
-read.csv("WorldEconomicOutlookData.csv")
 ```

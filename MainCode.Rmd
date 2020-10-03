@@ -11,8 +11,10 @@ library(dplyr)
 ```
 ```
 ```
+```
+The purpose of the first part of our code is to clear the dataset and make it easier to read and easior to calculate.
+```
 ```{r}
-#The purpose of the first part of our code is to clear the dataset and make it easier to read and easior to calculate.
 #Read Data
 allData<-read.csv("WorldEconomicOutlookData.csv")
 #Take a look at the data
@@ -35,8 +37,12 @@ allData[allData$WEO.Subject.Code=="GGXCNL_NGDP","WEO.Subject.Code"]="Government 
 useData<-allData%>%select("Subject"=WEO.Subject.Code,Country,X1980:X2021,Estimates.Start.After)
 #Drop the total NA rows
 useData<-useData[-(1553:1554),]
-#Explain the choose of variables
-#Country.Code, ISO, and Country are the same thing. So, we just keep the country in our useData. Also, we composed most of the information of the subject.code(units, what is it...)into the new Variable "Subject" in the useData. So, we just left the numbers from 1980 to 2021 to further use it for data visualization and calculation.
+```
+```
+```
+```
+Explain the choose of variables
+Country.Code, ISO, and Country are the same thing. So, we just keep the country in our useData. Also, we composed most of the information of the subject.code(units, what is it...)into the new Variable "Subject" in the useData. So, we just left the numbers from 1980 to 2021 to further use it for data visualization and calculation.
 ```
 ```
 ```

@@ -66,8 +66,8 @@ useData%>%ggplot(title="NGDP vs Years")+geom_line(aes(x=Years,y=`NGDP per person
 #For RGDP
 useData%>%ggplot()+geom_line(aes(x=Years,y=`RGDP (international dollars/Billions)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("RGDP vs Years")
 #Ha, the number in billions was continuesly increasing for RGDP.
-useData%>%ggplot()+geom_line(aes(x=Years,y=`Inflations rate average(Percentage)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("Inflations rate vs Years")
-useData%>%ggplot()+geom_line(aes(x=Years,y=`Inflations rate end(Percentage)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("Inflations rate vs Years")
+useData%>%ggplot()+geom_line(aes(x=Years,y=`Inflations rate average(Percentage)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("Inflations rate average vs Years")
+useData%>%ggplot()+geom_line(aes(x=Years,y=`Inflations rate end(Percentage)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("Inflations rate end vs Years")
 #Seems wield that the inflation rate does not change much as the RGDP increased rapidly. Check on it.
 #Unemployment rate
 useData%>%ggplot()+geom_line(aes(x=Years,y=`Unemployment rate(Percentage of Population)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("Unemployment rate vs Years")
@@ -158,12 +158,26 @@ plot(mod_sel,scale = "adjr2")
 ```
 ```
 ```
-```{r}
-#If have time use outside dataset to better predict the NGDP. 
-```
-```
-```
-```{r}
-#Graph and GIF for PPT
+```{r,eval=F}
+#GGIF for PPT, which looks better
+#For NGDP
+useData%>%ggplot(title="NGDP vs Years")+geom_line(aes(x=Years,y=`NGDP(Percentage)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("NGDP vs Years")+transition_reveal(Years)
+useData%>%ggplot(title="NGDP vs Years")+geom_line(aes(x=Years,y=`NGDP per person(Percentage)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("NGDP(per person) vs Years")+transition_reveal(Years)
+#The average NGDP percentage for people is quite consistent with the overall NGDP increase percentage.It seems that the NGDP is quite chaotic for each country. However, there is an apparent sharp decrease around 2010 and 2020. We would dig deeper into it later.
+#For RGDP
+useData%>%ggplot()+geom_line(aes(x=Years,y=`RGDP (international dollars/Billions)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("RGDP vs Years")+transition_reveal(Years)
+#Ha, the number in billions was continuously increasing for RGDP. This is due to inflation
+useData%>%ggplot()+geom_line(aes(x=Years,y=`Inflations rate average(Percentage)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("Inflations rate average vs Years")+transition_reveal(Years)
+useData%>%ggplot()+geom_line(aes(x=Years,y=`Inflations rate end(Percentage)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("Inflations rate end vs Years")+transition_reveal(Years)
+#Seems wield that the inflation rate does not change much as the RGDP increased rapidly. Check on it.
+#Unemployment rate
+useData%>%ggplot()+geom_line(aes(x=Years,y=`Unemployment rate(Percentage of Population)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("Unemployment rate vs Years")+transition_reveal(Years)
+#Pretty chaos
+#Government net lending/borrowing
+useData%>%ggplot()+geom_line(aes(x=Years,y=`Government net lending/borrowing(Percentage of GDP)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("Government net lending/borrowing")+transition_reveal(Years)
+#Very consistent for each country.
+#Current account balance
+useData%>%ggplot()+geom_line(aes(x=Years,y=`Current account balance(Percentage of GDP)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("Current account balance")+transition_reveal(Years)
+
 ```
 

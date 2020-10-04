@@ -8,6 +8,11 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(tidyverse)
 library(dplyr)
+library(gganimate)
+library(gifski)
+library(png)
+library(car)
+library(leaps)
 ```
 ```
 ```
@@ -47,7 +52,7 @@ useData<-useData%>%pivot_wider(names_from = Subject,values_from=Value)
 ```
 ```
 Explain the choose of variables
-Country.Code, ISO, and Country are the same thing. So, we just keep the country in our useData. Also, we composed most of the information of the subject.code(units, what is it...)into the new Variable "Subject" in the useData. So, we just left the numbers from 1980 to 2021 to further use it for data visualization and calculation.
+Country.Code, ISO, and Country are the same thing. So, we just keep the country in our useData. Also, we composed most of the information of the subject.code(units, what is it...)into the new Variable "Subject" in the useData. So, we just left the numbers from 1980 to 2021 to further use it for data visualization and calculation.The Estimates.Start.After is the prediction made by the IMF, I left it here just for notification purpose.
 ```
 ```
 ```
@@ -126,6 +131,39 @@ useDataUR2009<-useDataUR[useDataUR$Years==2009,]
 useDataUR2020<-useDataUR[useDataUR$Years==2020,]
 ggplot(mapping=aes(x=Range))+geom_bar(data=useDataUR2009,aes(fill="2009"))+geom_bar(data=useDataUR2020,aes(fill="2020"))+ggtitle("2009 vs 2020 Unemployer rate")+labs(x="Unemployer rate",y="Number of Countries",color="Years")+scale_fill_manual(values=colors)
 #As can been seen from the graph, the unemployment rate is also a lot higher in 2020 than in 2009
-#As RGDP does not show how economy is due to inflation and other varibles are not very closely related to the good or worth an economy is
+#As RGDP does not show how economy is due to inflation and other variables are no direct relation to the good or worth an economy is.
 #So, it can be concluded that 2020 COVID-19 has bigger influence to the economics than the 2009 financial crisis.
 ```
+```
+```
+```{r}
+#Doing regression
+#First of all to make calculation easier, remove all the NA
+useDataNoNA<-na.omit(useData)
+#Rename to make the regression easier to read
+useDataNoNA<-useDataNoNA%>%rename("NGDP"=`NGDP(Percentage)`,"RGDP"=`RGDP (international dollars/Billions)`,"IRA"=`Inflations rate average(Percentage)`,"IRE"=`Inflations rate end(Percentage)`,"UR"=`Unemployment rate(Percentage of Population)`,"GLB"=`Government net lending/borrowing(Percentage of GDP)`,"CAB"=`Current account balance(Percentage of GDP)`)
+#For all, we want to know whether there is some relationship between NGDP growth percent and other things.
+#Do the regression on whole and then conduct multicollinearity test to remove variables
+reg<-lm(data = useDataNoNA,NGDP~Years+RGDP+IRA+IRE+UR+GLB+CAB)
+summary(reg)
+#Run multicollinearity test
+vif(reg)
+#It seems that Inflation rate average and Inflation rate end is highly related. We would choose Inflation rate average as it is a more precise description of the inflation rate of a year.
+reg<-lm(data = useDataNoNA,NGDP~Years+RGDP+IRA+UR+GLB+CAB)
+summary(reg)
+#Doing backward model selection to get the best predict variables
+mod_sel<-regsubsets(NGDP~Years+RGDP+IRA+UR+GLB+CAB,data=useDataNoNA,nbest = 1,nvmax = 6,method = "backward")
+plot(mod_sel,scale = "adjr2")
+#As can be seen in the graph, the government lending/borrowing is has the most influence on NGDP(the biggest adjusted R^2), the second is the inflation rate average. However, even add up all the variables, the adjusted R^2 is still as small as 0.1363, meaning only 13.63% of the data could be explained by the variables. So, overall, we can conclude that the NGDP growth percent has very weak relationship with the other variables.
+```
+```
+```
+```{r}
+#If have time use outside dataset to better predict the NGDP. 
+```
+```
+```
+```{r}
+#Graph and GIF for PPT
+```
+

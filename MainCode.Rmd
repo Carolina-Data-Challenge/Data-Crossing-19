@@ -20,7 +20,7 @@ allData<-read.csv("WorldEconomicOutlookData.csv")
 #Take a look at the data
 summary(allData)
 #All in char change into double
-allData<-allData%>%mutate(WEO.Country.Code=as.numeric(WEO.Country.Code),"1980"=as.numeric(X1980),"1981"=as.numeric(X1981),"1982"=as.numeric(X1982),"1983"=as.numeric(X1983),"1984"=as.numeric(X1984),"1985"=as.numeric(X1985),"1986"=as.numeric(X1986),"1987"=as.numeric(X1987),"1988"=as.numeric(X1988),"1989"=as.numeric(X1989),"1990"=as.numeric(X1990),"1991"=as.numeric(X1991),"1992"=as.numeric(X1992),"1993"=as.numeric(X1993),"1994"=as.numeric(X1994),"1995"=as.numeric(X1995),"1996"=as.numeric(X1996),"1997"=as.numeric(X1997),"1998"=as.numeric(X1998),"1999"=as.numeric(X1999),"2000"=as.numeric(X2000),"2001"=as.numeric(X2001),"2002"=as.numeric(X2002),"2003"=as.numeric(X2003),"2004"=as.numeric(X2004),"2005"=as.numeric(X2005),"2006"=as.numeric(X2006),"2007"=as.numeric(X2007),"2008"=as.numeric(X2008),"2009"=as.numeric(X2009),"2010"=as.numeric(X2010),"2011"=as.numeric(X2011),"2012"=as.numeric(X2012),"2013"=as.numeric(X2013),"2014"=as.numeric(X2014),"2015"=as.numeric(X2015),"2016"=as.numeric(X2016),"2017"=as.numeric(X2017),"2018"=as.numeric(X2018),"2019"=as.numeric(X2019),"2020"=as.numeric(X2020),"2021"=as.numeric(X2021),Estimates.Start.After=as.numeric(Estimates.Start.After))
+allData<-allData%>%mutate(WEO.Country.Code=as.integer(WEO.Country.Code),"1980"=as.integer(X1980),"1981"=as.integer(X1981),"1982"=as.integer(X1982),"1983"=as.integer(X1983),"1984"=as.integer(X1984),"1985"=as.integer(X1985),"1986"=as.integer(X1986),"1987"=as.integer(X1987),"1988"=as.integer(X1988),"1989"=as.integer(X1989),"1990"=as.integer(X1990),"1991"=as.integer(X1991),"1992"=as.integer(X1992),"1993"=as.integer(X1993),"1994"=as.integer(X1994),"1995"=as.integer(X1995),"1996"=as.integer(X1996),"1997"=as.integer(X1997),"1998"=as.integer(X1998),"1999"=as.integer(X1999),"2000"=as.integer(X2000),"2001"=as.integer(X2001),"2002"=as.integer(X2002),"2003"=as.integer(X2003),"2004"=as.integer(X2004),"2005"=as.integer(X2005),"2006"=as.integer(X2006),"2007"=as.integer(X2007),"2008"=as.integer(X2008),"2009"=as.integer(X2009),"2010"=as.integer(X2010),"2011"=as.integer(X2011),"2012"=as.integer(X2012),"2013"=as.integer(X2013),"2014"=as.integer(X2014),"2015"=as.integer(X2015),"2016"=as.integer(X2016),"2017"=as.integer(X2017),"2018"=as.integer(X2018),"2019"=as.integer(X2019),"2020"=as.integer(X2020),"2021"=as.integer(X2021),Estimates.Start.After=as.integer(Estimates.Start.After))
 #See what the subject code means
 discription<-unique(allData%>%select(WEO.Subject.Code,Subject.Descriptor,Units))
 unique(discription)
@@ -39,7 +39,7 @@ useData<-allData%>%select("Subject"=WEO.Subject.Code,Country,"1980":"2021",Estim
 useData<-useData[-(1553:1554),]
 #use pivot longer to reduce variables
 useData<-useData%>%pivot_longer("1980":"2021",names_to = "Years",values_to="Value")
-useData<-useData%>%mutate(Years=as.numeric(Years))
+useData<-useData%>%mutate(Years=as.integer(Years))
 #use pivot wider to dispose different subjects
 useData<-useData%>%pivot_wider(names_from = Subject,values_from=Value)
 ```
@@ -57,11 +57,10 @@ Country.Code, ISO, and Country are the same thing. So, we just keep the country 
 #For NGDP
 useData%>%ggplot(title="NGDP vs Years")+geom_line(aes(x=Years,y=`NGDP(Percentage)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("NGDP vs Years")
 useData%>%ggplot(title="NGDP vs Years")+geom_line(aes(x=Years,y=`NGDP per person(Percentage)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("NGDP(per person) vs Years")
-#The average NGDP percentage for people is quite consistent with the overall NGDP increase percentage.It seems that the NGDP is quite chaotic for each country. However, there is an apparent sharp decrease around 1995, 2010, and 2020. We would dig deeper into it later.
+#The average NGDP percentage for people is quite consistent with the overall NGDP increase percentage.It seems that the NGDP is quite chaotic for each country. However, there is an apparent sharp decrease around 2010 and 2020. We would dig deeper into it later.
 #For RGDP
 useData%>%ggplot()+geom_line(aes(x=Years,y=`RGDP (international dollars/Billions)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("RGDP vs Years")
-#Ha, most all the percentage of the increase of RGDP are increasing but that percentage for NGDP is quite consistent. Maybe due to inflation.Check it later.
-#For Inflation rate
+#Ha, the number in billions was continuesly increasing for RGDP.
 useData%>%ggplot()+geom_line(aes(x=Years,y=`Inflations rate average(Percentage)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("Inflations rate vs Years")
 useData%>%ggplot()+geom_line(aes(x=Years,y=`Inflations rate end(Percentage)`,color=Country),na.rm = T)+ theme(legend.position = "none")+ggtitle("Inflations rate vs Years")
 #Seems wield that the inflation rate does not change much as the RGDP increased rapidly. Check on it.
@@ -78,5 +77,55 @@ useData%>%ggplot()+geom_line(aes(x=Years,y=`Current account balance(Percentage o
 ```
 ```
 ```{r}
+#In this part,we would answer the question we have in the data visualization part.
+#What had happened in 2009 and 2020 that the NGDP decreased for many of the countries?
+#2009
+useData[useData$Years==2009,]$`NGDP(Percentage)`
+nrow(useData[useData$Years==2009&!is.na(useData$`NGDP(Percentage)`),])-nrow(useData[useData$Years==2009&useData$`NGDP(Percentage)`>0&!is.na(useData$`NGDP(Percentage)`),])
+#105 out of 192 of the countries, of which we have data, have negative NGDP growth. Searched online, this is consequence of the 2008 would-wide financial crisis, which make sense.
+#2020
+useData[useData$Years==2020,]$`NGDP(Percentage)`
+nrow(useData[useData$Years==2020&!is.na(useData$`NGDP(Percentage)`),])-nrow(useData[useData$Years==2020&useData$`NGDP(Percentage)`>0&!is.na(useData$`NGDP(Percentage)`),])
+#161 out of 193 of the countries, of which we have data, have negative NGDP growth. COVID-19 is really making the economic down.
+```
+```
+```
+```{r}
+#Lets calculate the data to see whether 2008 financial crisis is more serious or the COVID 19?
+#See the NGDP first
+#Firstly seperated by range
+useDataCompare<-useData[useData$Years==2020|useData$Years==2009,]%>%select(Country,`NGDP(Percentage)`,Years)
+useDataCompare<-useDataCompare%>%mutate(Range=" ")
+useDataCompare[!is.na(useDataCompare$`NGDP(Percentage)`)&useDataCompare$`NGDP(Percentage)`>0,]$Range="positive"
+useDataCompare[!is.na(useDataCompare$`NGDP(Percentage)`)&0>=useDataCompare$`NGDP(Percentage)`&useDataCompare$`NGDP(Percentage)`>-10,]$Range="-10 to 0"
+useDataCompare[!is.na(useDataCompare$`NGDP(Percentage)`)&-10>=useDataCompare$`NGDP(Percentage)`&useDataCompare$`NGDP(Percentage)`>-20,]$Range="-20 to -10"
+useDataCompare[!is.na(useDataCompare$`NGDP(Percentage)`)&-20>=useDataCompare$`NGDP(Percentage)`&useDataCompare$`NGDP(Percentage)`>-30,]$Range="-30 to -20"
+useDataCompare[!is.na(useDataCompare$`NGDP(Percentage)`)&-30>=useDataCompare$`NGDP(Percentage)`&useDataCompare$`NGDP(Percentage)`>-40,]$Range="-40 to -30"
+useDataCompare[!is.na(useDataCompare$`NGDP(Percentage)`)&-40>=useDataCompare$`NGDP(Percentage)`&useDataCompare$`NGDP(Percentage)`>-50,]$Range="-50 to -40"
+useDataCompare[!is.na(useDataCompare$`NGDP(Percentage)`)&-50>=useDataCompare$`NGDP(Percentage)`,]$Range="smaller than -50"
+#Get rid of NA values
+useDataCompare<-useDataCompare[!is.na(useDataCompare$`NGDP(Percentage)`),]
+#Seperate into 2009 and 2020
+useDataCompare2009<-useDataCompare[useDataCompare$Years==2009,]
+useDataCompare2020<-useDataCompare[useDataCompare$Years==2020,]
+colors<- c("2020" = "light blue", "2009" = "pink")
+ggplot(mapping=aes(x=Range))+geom_bar(data=useDataCompare2009,aes(fill="2009"))+geom_bar(data=useDataCompare2020,aes(fill="2020"))+ggtitle("2009 vs 2020 NGDP growth in percentage")+labs(x="Percentage of Growth in NGDP",y="Number of Countries",color="Years")+scale_fill_manual(values=colors)+theme(axis.text.x = element_text(angle = 90))
+#As can be seen in the graph, 2009 has less negative growth NGDP, but more positive ones. 
 
+#RGDP may be imprecise due to inflation. We would go ahead to see the unemployment rate
+useDataUR<-useData[useData$Years==2020|useData$Years==2009,]%>%select(Country,`Unemployment rate(Percentage of Population)`,Years)
+useDataUR<-useDataUR%>%mutate(Range=" ")
+useDataUR[!is.na(useDataUR$`Unemployment rate(Percentage of Population)`)&useDataUR$`Unemployment rate(Percentage of Population)`>30,]$Range="Larger than 30"
+useDataUR[!is.na(useDataUR$`Unemployment rate(Percentage of Population)`)&30>=useDataUR$`Unemployment rate(Percentage of Population)`&useDataUR$`Unemployment rate(Percentage of Population)`>20,]$Range="20 to 30"
+useDataUR[!is.na(useDataUR$`Unemployment rate(Percentage of Population)`)&20>=useDataUR$`Unemployment rate(Percentage of Population)`&useDataUR$`Unemployment rate(Percentage of Population)`>10,]$Range="10 to 20"
+useDataUR[!is.na(useDataUR$`Unemployment rate(Percentage of Population)`)&10>=useDataUR$`Unemployment rate(Percentage of Population)`&useDataUR$`Unemployment rate(Percentage of Population)`>=0,]$Range="0 to 10"
+#Get rid of NA values
+useDataUR<-useDataUR[!is.na(useDataUR$`Unemployment rate(Percentage of Population)`),]
+#Seperate into 2009 and 2020
+useDataUR2009<-useDataUR[useDataUR$Years==2009,]
+useDataUR2020<-useDataUR[useDataUR$Years==2020,]
+ggplot(mapping=aes(x=Range))+geom_bar(data=useDataUR2009,aes(fill="2009"))+geom_bar(data=useDataUR2020,aes(fill="2020"))+ggtitle("2009 vs 2020 Unemployer rate")+labs(x="Unemployer rate",y="Number of Countries",color="Years")+scale_fill_manual(values=colors)
+#As can been seen from the graph, the unemployment rate is also a lot higher in 2020 than in 2009
+#As RGDP does not show how economy is due to inflation and other varibles are not very closely related to the good or worth an economy is
+#So, it can be concluded that 2020 COVID-19 has bigger influence to the economics than the 2009 financial crisis.
 ```

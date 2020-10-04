@@ -114,7 +114,7 @@ useDataCompare<-useDataCompare[!is.na(useDataCompare$`NGDP(Percentage)`),]
 useDataCompare2009<-useDataCompare[useDataCompare$Years==2009,]
 useDataCompare2020<-useDataCompare[useDataCompare$Years==2020,]
 colors<- c("2020" = "light blue", "2009" = "pink")
-ggplot(mapping=aes(x=Range))+geom_bar(data=useDataCompare2009,aes(fill="2009"))+geom_bar(data=useDataCompare2020,aes(fill="2020"))+ggtitle("2009 vs 2020 NGDP growth in percentage")+labs(x="Percentage of Growth in NGDP",y="Number of Countries",color="Years")+scale_fill_manual(values=colors)+theme(axis.text.x = element_text(angle = 90))
+ggplot(mapping=aes(x=Range))+geom_bar(data=useDataCompare2009,aes(fill="2009"))+geom_bar(data=useDataCompare2020,aes(fill="2020"))+ggtitle("2009 vs 2020 NGDP growth in percentage")+labs(x="Percentage of Growth in NGDP",y="Number of Countries",fill="Years")+scale_fill_manual(values=colors)+theme(axis.text.x = element_text(angle = 90))
 #As can be seen in the graph, 2009 has less negative growth NGDP, but more positive ones. 
 
 #RGDP may be imprecise due to inflation. We would go ahead to see the unemployment rate
@@ -129,7 +129,7 @@ useDataUR<-useDataUR[!is.na(useDataUR$`Unemployment rate(Percentage of Populatio
 #Seperate into 2009 and 2020
 useDataUR2009<-useDataUR[useDataUR$Years==2009,]
 useDataUR2020<-useDataUR[useDataUR$Years==2020,]
-ggplot(mapping=aes(x=Range))+geom_bar(data=useDataUR2009,aes(fill="2009"))+geom_bar(data=useDataUR2020,aes(fill="2020"))+ggtitle("2009 vs 2020 Unemployer rate")+labs(x="Unemployer rate",y="Number of Countries",color="Years")+scale_fill_manual(values=colors)
+ggplot(mapping=aes(x=Range))+geom_bar(data=useDataUR2009,aes(fill="2009"))+geom_bar(data=useDataUR2020,aes(fill="2020"))+ggtitle("2009 vs 2020 Unemployer rate")+labs(x="Unemployer rate",y="Number of Countries",fill="Years")+scale_fill_manual(values=colors)
 #As can been seen from the graph, the unemployment rate is also a lot higher in 2020 than in 2009
 #As RGDP does not show how economy is due to inflation and other variables are no direct relation to the good or worth an economy is.
 #So, it can be concluded that 2020 COVID-19 has bigger influence to the economics than the 2009 financial crisis.
